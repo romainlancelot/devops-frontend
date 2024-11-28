@@ -33,6 +33,7 @@ jobs:
   tests:
     name: Run tests
     runs-on: ubuntu-latest
+    needs: lint
     strategy:
       matrix:
         node-version: ["22.x"]
