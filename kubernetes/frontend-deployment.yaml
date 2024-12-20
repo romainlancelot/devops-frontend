@@ -18,6 +18,3 @@ spec:
           image: romainlancelot/devops-frontend:latest
           ports:
             - containerPort: 80
-          env:
-            - name: VITE_BACKEND_API
-              value: https://backend-borg.jbienvenu.fr

@@ -2,7 +2,5 @@ services:
   client:
     build: .
     container_name: frontend
-    environment:
-      VITE_BACKEND_API: https://backend-borg.jbienvenu.fr
     ports:
       - '8080:80'
