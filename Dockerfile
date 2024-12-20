@@ -1,10 +1,11 @@
 FROM node:22.11-alpine3.20 AS build
 
 WORKDIR /app
+COPY package-lock.json .
+COPY package.json .
+RUN npm ci
 COPY . .
-
-RUN npm install && \
-    npm run build
+RUN npm run build
 
 FROM nginx:mainline-alpine3.20-slim
 

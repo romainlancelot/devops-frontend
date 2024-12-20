@@ -1,0 +1,22 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: frontend-route # Remplir avec un nom arbitraire pour identifier votre ressource.
+  namespace: borg # Remplir avec votre namespace
+spec:
+  parentRefs:
+    - name: http-gateway # Il s'agit du nom de la gateway globale, vous ne devez pas le changer.
+      namespace: nginx-gateway # Il s'agit du namespace contenant la gateway globale, vous ne devez pas le changer.
+  hostnames:
+    - frontend-borg.jbienvenu.fr # Mettre votre nom de domaine ici. Il faudra me demander de vous en générer un.
+  rules:
+    - matches:
+        - path: # Cette section permet de définir les routes qui seront redirigées. Il est rare d'avoir besoin de mettre
+            # autre chose ici.
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: frontend-service # Ici, il faut mettre le nom de votre service vers lequel le traffic sera redirigé
+          port:
+            80 # Le traffic sera redirigé vers le port du service. Il s'agit du port défini par la propriété 'port'
+            # du service, et non 'targetPort'.
