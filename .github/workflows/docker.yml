@@ -74,6 +74,8 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
       - name: Deploy to Kubernetes
         run: |
-          helm upgrade --install --namespace ${{ vars.KUBE_NAMESPACE }} \
+          helm upgrade --install \
+            --namespace ${{ vars.KUBE_NAMESPACE }} \
             --kubeconfig kubeconfig.yaml \
+            -- set frontend.deployment.imageTag=${{ github.sha }} \
             ${{ vars.HELM_CHART }} ./${{ vars.HELM_CHART }}

@@ -1,6 +1,7 @@
 frontend:
   deployment:
-    image: romainlancelot/devops-frontend:latest
+    image: romainlancelot/devops-frontend
+    imageTag: latest
     port: 80
   httproute:
     hostname: frontend-borg.jbienvenu.fr
