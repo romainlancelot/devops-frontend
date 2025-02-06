@@ -28,6 +28,8 @@ This document explains how to deploy your frontend application to a Kubernetes c
 
 ### 3. Deployment Commands:
 
+#### Using kubectl:
+
 - Apply the YAML files in the following order (assuming they are in the same directory):
 
   ```bash
@@ -38,11 +40,26 @@ This document explains how to deploy your frontend application to a Kubernetes c
 
   ```bash
   kubectl apply -f frontend-deployment.yaml -n borg
+  kubectl apply -f frontend-httproute.yaml -n borg
   kubectl apply -f frontend-service.yaml -n borg
-  kubectl apply -f external-nginx-configmap.yaml -n borg
-  kubectl apply -f external-nginx-deployment.yaml -n borg
-  kubectl apply -f external-nginx-service.yaml -n borg
   ```
+
+#### Using Helm:
+
+- If you have Helm installed, you can package the deployment as a Helm chart and deploy it using Helm commands.
+
+  ```bash
+  helm install --upgrade \
+    --namespace borg \
+    --kubeconfig kubeconfig.yaml \
+    helm-frontend ./helm-frontend
+  ```
+
+> Provide the correct path to the `kubeconfig.yaml` file if your cluster is not running locally.
+
+- The Helm chart contains the same Kubernetes resources defined in the YAML files.
+- You can customize the Helm chart values to adjust the deployment configuration.
+- Refer to the Helm chart directory for more details on the chart structure.
 
 ### 2. Verification:
 
