@@ -77,5 +77,5 @@ jobs:
           helm upgrade --install \
             --namespace ${{ vars.KUBE_NAMESPACE }} \
             --kubeconfig kubeconfig.yaml \
-            -- set frontend.deployment.imageTag=${{ github.sha }} \
+            --set frontend.deployment.imageTag=${{ github.sha }} \
             ${{ vars.HELM_CHART }} ./${{ vars.HELM_CHART }}
