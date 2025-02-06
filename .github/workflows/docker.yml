@@ -27,7 +27,7 @@ jobs:
       matrix:
         node-version: ["22.x"]
     steps:
-      -  uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -47,13 +47,33 @@ jobs:
       - name: Login to docker registry
         uses: docker/login-action@v3
         with:
-          username: ${{secrets.DOCKERHUB_USERNAME}}
-          password: ${{secrets.DOCKERHUB_TOKEN}}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push docker image to registry
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: |
-            ${{secrets.DOCKERHUB_USERNAME}}/devops-frontend:${{github.sha}}
-            ${{secrets.DOCKERHUB_USERNAME}}/devops-frontend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/devops-frontend:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/devops-frontend:latest
+
+  helm_deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: push_to_registry
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+      - name: Install helm
+        uses: azure/setup-helm@v4.2.0
+      - name: Create kubeconfig file
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+      - name: Deploy to Kubernetes
+        run: |
+          helm upgrade --install --namespace ${{ vars.KUBE_NAMESPACE }} \
+            --kubeconfig kubeconfig.yaml \
+            ${{ vars.HELM_CHART }} ./${{ vars.HELM_CHART }}
