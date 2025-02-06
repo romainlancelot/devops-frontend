@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: {{.Values.frontend.service.name}}
   namespace: {{.Release.Namespace}}
 spec:
   selector:
     app: frontend
   ports:
     - protocol: TCP
-      port: {{.Values.frontend.deployment.containerPort}}
-      targetPort: {{.Values.frontend.deployment.containerPort}}
+      port: {{.Values.frontend.service.port}}
+      targetPort: {{.Values.frontend.deployment.port}}
   type: ClusterIP
